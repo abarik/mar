@@ -22,4 +22,10 @@ Az egyetemi, a főiskolai szintű és az osztatlan képzésben résztvevőkkel e
   * `netflix.[xlsx|sav|txt|csv]`
   * Forrás: https://www.kaggle.com/shivamb/netflix-shows  
   Letöltés: 2020.02.29
+  
+* Telefonos alkalmazások használata
+  * `mobilhasznalat.[xlsx|sav|txt|csv]`
+  * Forrás: Yndgaard, Chris Daniel (2019). Nemi különbségek a telefonos alkalmazások használatában. BA Szakdolgozat. Debreceni Egyetem, Bölcsészettudományi Kar, Pszichológiai Intézet.
+  * A szerző engedélyével.
+
 

@@ -127,4 +127,64 @@ d %>% ggplot(aes(x=megjelenes.eve, y=1)) + geom_point() + geom_label_repel(aes(l
 ```
 
 
+# Filmek és sorozatok a Netflix-en (2008-2019)
+
+```{r}
+d <- import(file = "adatok/netflix.txt", encoding="UTF-8")
+glimpse(d)
+Freq(d$type)
+```
+
+
+```{r}
+d <- d %>% count(type)
+d <- d %>% mutate(prop=round(100*n/sum(d$n),1))
+
+d <- d %>%  arrange(desc(type)) %>% mutate(lab.ypos = cumsum(prop) - 0.5*prop)
+
+ 
+mycols <- c("#0073C2FF", "#EFC000FF", "#868686FF", "#CD534CFF")
+
+ggplot(d, aes(x = "", y = prop, fill = type)) +
+  geom_bar(width = 1, stat = "identity", color = "white") +
+  coord_polar("y", start = 0)+
+  geom_text(aes(y = lab.ypos, label = paste0(prop, "%")), color = "white")+
+  theme_void() + scale_fill_brewer(name="", palette="Set2") + 
+  theme(legend.position = "left")
+
+
+d$year_added <- year(mdy(d$date_added)) # év kiszedése
+
+# Régebbi állomány
+d.2 <- import(file = "adatok_temp/netflix_titles_nov_2019.csv")
+names(d.2)
+d.2$year_added <- year(mdy(d.2$date_added))
+
+Freq(d$year_added)
+Freq(d.2$year_added)
+
+
+Freq(d$type)
+Freq(d.2$type)
+
+Freq(d$date_added)
+Freq(d.2$date_added)
+
+Freq(d$release_year)
+Freq(d.2$release_year)
+
+
+Freq(d$rating)
+Freq(d.2$rating)
+
+
+ggplot(data=d, aes(x=type)) + geom_bar(aes(y=stat(prop)))
+
+
+
+ggplot(data=d, aes(x=year_added, y=stat(count), group=type)) + geom_line()
+
+
+```
+
 
