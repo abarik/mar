@@ -1,0 +1,130 @@
+---
+title: "Adatállományok"
+author: "Abari Kálmán"
+date: "`r format(Sys.time(), '%Y. %m. %d.')`"
+output: 
+  html_document: 
+    fig_height: 5.5
+    fig_width: 8.5
+    theme: flatly
+    toc: yes
+    toc_float: true
+--- 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F, tidy = T)
+```
+
+
+```{r echo=T, cache=FALSE, results=FALSE, warning=FALSE, comment=FALSE, warning=FALSE} 
+library(rio)
+library(tidyverse)
+library(easystats)
+library(gridExtra)
+library(directlabels)
+library(ggrepel)
+library(DescTools)
+```
+
+
+
+# Irodalmi Nobel-díjasok (1901-2019)
+
+```{r}
+d <- import(file = "adatok/irodalmi_nobel.xlsx")
+glimpse(d)
+```
+
+
+
+
+```{r fig.asp=0.3, fig.width=10, fig.cap='', fig.align='center', out.width='100%', dpi=300}
+p1 <- ggplot(data = d, aes(x=nem, fill=nem)) + 
+  geom_bar(color="grey60") +
+  geom_text(aes(label=stat(count)), stat="count", vjust=1.25, color="grey88") +  
+  theme_minimal() + theme(legend.position = "none") + 
+  labs(x="", y="", title="Irodalmi Nobel-díjasok (1901-2019)", subtitle = "Nem")
+
+
+p2 <- d %>% count(kontinens) %>% 
+  mutate(kontinens = factor(kontinens, levels = unique(kontinens))) %>% 
+  ggplot(aes(x=reorder(kontinens, n), y=n, fill=kontinens)) + 
+  geom_col(color="grey60") +
+  geom_text(aes(label=n), hjust=-.25, color="grey22") + coord_flip() + theme_minimal() +
+  theme(legend.position = "none") + labs(x="", y="", subtitle="Kontinensek") +
+  scale_y_continuous(limits=c(0,100))
+
+
+p3 <- d %>% count(orszag) %>% 
+  arrange(-n) %>% 
+  mutate(orszag = factor(orszag, levels = unique(orszag))) %>% slice(1:10) %>%
+  ggplot(aes(x=reorder(orszag, n), y=n, fill=orszag)) + 
+  geom_col(color="grey60") + 
+  geom_text(aes(label=n), hjust=1.25, color="grey88")  + coord_flip() + theme_minimal() + 
+  theme(legend.position = "none") + labs(x="", y="", subtitle="Országok")
+
+grid.arrange(p1, p2, p3, ncol=3)
+```
+
+# Felsőfokú alap- és mesterképzés (1990–2018) létszám adatai  
+
+Az egyetemi, a főiskolai szintű és az osztatlan képzésben résztvevőkkel együtt. 
+
+```{r}
+d <- import(file = "adatok/felsofoku.xlsx")
+glimpse(d)
+```
+
+
+
+
+```{r fig.asp=0.55, fig.width=7, fig.cap='', fig.align='center', out.width='100%', dpi=300}
+# A tanev lerövidítése
+d$tanev <- paste0(substr(x = d$tanev, start = 1, stop = 5), substr(x = d$tanev, start = 8, stop = 9)) 
+
+d.l <- pivot_longer(data = d, cols = 2:6, names_to = "csoport", values_to = "fo")
+d.l$csoport <- factor(d.l$csoport)
+levels(d.l$csoport) <- c("Nappalis elsős","Nappalis külföldi", "Nappalis", "Nappalis nő", "Összes")
+d.l$csoport <- factor(d.l$csoport, levels=c("Összes", "Nappalis", "Nappalis elsős", "Nappalis külföldi", "Nappalis nő"))
+d.l %>% filter(csoport %in% c("Összes", "Nappalis", "Nappalis elsős", "Nappalis külföldi")) %>% 
+ggplot(aes(x=tanev, y=fo, group=csoport, color=csoport)) + geom_line(size=1.4) + 
+  scale_x_discrete(name="Tanév", expand = c(0,0.6,0,4.6)) +
+  scale_color_discrete(name="", labels=c("Összes hallgató", "Nappalis", "Nappalis elsős", "Nappalis külföldi")) +
+   geom_dl(aes(label = csoport), method = list("last.points", cex = 0.8, rot=45)) + theme_bw() + 
+   theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+  scale_y_continuous(name="Ezer fő", labels = scales::comma_format(big.mark = " ", scale = 0.001)) + theme(legend.position = "top")
+
+
+```
+
+
+
+# Agatha Christie regényei (Miss Marple és Harcule Poirot)
+
+
+```{r}
+d <- import(file = "adatok/agatha_christie.txt", encoding="UTF-8")
+glimpse(d)
+Freq(d$szereplo)
+```
+
+```{r}
+d <- d %>% 
+  count(szereplo)
+d %>% 
+  mutate(prop = n / sum(d$n) *100) %>%
+  mutate(ypos = cumsum(prop)- 0.5*prop ) %>% 
+  ggplot(aes(x="", y=prop, fill=szereplo)) + geom_bar(stat="identity", width=1, color="white") + coord_polar("y", start=0) + theme_void() + 
+   geom_text(aes(y = ypos, label = szereplo), color = "white", size=6) +
+  scale_fill_brewer(palette="Set2")
+
+```
+
+
+
+```{r}
+d %>% ggplot(aes(x=megjelenes.eve, y=1)) + geom_point() + geom_label_repel(aes(label=cim.magyar, color=szereplo), size=3) + theme(legend.position = "top") + scale_y_continuous(breaks = NULL, name="") + scale_x_continuous(name="", breaks=unique())
+```
+
+
+
