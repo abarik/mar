@@ -12,7 +12,7 @@ Az egyetemi, a főiskolai szintű és az osztatlan képzésben résztvevőkkel e
   * Forrás: http://www.ksh.hu/docs/hun/xstadat/xstadat_eves/i_zoi008.html  
   Letöltés: 2020.02.28
 
-* Agatha Christie regényei (Miss Marple és Harcule Poirot)
+* Agatha Christie regényei (Miss Marple és Hercule Poirot)
   * `agatha_christie.[xlsx|sav|txt|csv]`
   * Forrás: https://hu.wikipedia.org/wiki/Hercule_Poirot  
   https://hu.wikipedia.org/wiki/Miss_Marple  
