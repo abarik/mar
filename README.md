@@ -1,3 +1,3 @@
-# mar
+# Modern adatelemzés R-ben. 
 
-Modern adatelemzés R-ben. Az első lépésektől az egy- és kétváltozós hipotézisvizsgálatokig.
+## Az első lépésektől az egy- és kétváltozós hipotézisvizsgálatokig.
