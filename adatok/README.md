@@ -28,4 +28,8 @@ Az egyetemi, a főiskolai szintű és az osztatlan képzésben résztvevőkkel e
   * Forrás: Yndgaard, Chris Daniel (2019). Nemi különbségek a telefonos alkalmazások használatában. BA Szakdolgozat. Debreceni Egyetem, Bölcsészettudományi Kar, Pszichológiai Intézet.
   * A szerző engedélyével.
 
-
+* Metál bandák (mini adatbázis)
+  * `metal_bandak.[xlsx|sav|txt|csv]`
+  * Forrás: http://metalstorm.net/bands/  
+  Letöltés: 2020. 02. 05
+  
